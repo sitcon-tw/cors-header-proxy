@@ -83,11 +83,25 @@ export default {
     `;
 
 		async function handleRequest(request) {
+			const origin = request.headers.get("Origin");
+			if (origin && !ALLOWED_FRONTEND_ORIGINS.has(origin)) {
+				return new Response("Forbidden: Origin not allowed", { status: 403 });
+			}
+
 			const url = new URL(request.url);
 			let apiUrl = url.searchParams.get("url");
 
 			if (apiUrl == null) {
 				apiUrl = API_URL;
+			}
+
+			try {
+				const targetUrl = new URL(apiUrl);
+				if (!ALLOWED_TARGET_ORIGINS.has(targetUrl.origin)) {
+					return new Response("Forbidden: Target URL origin not allowed", { status: 403 });
+				}
+			} catch (e) {
+				return new Response("Invalid target URL", { status: 400 });
 			}
 
 			// Rewrite request to point to API URL. This also makes the request mutable
@@ -101,7 +115,11 @@ export default {
 			response = new Response(response.body, response);
 			// Set CORS headers
 
-			response.headers.set("Access-Control-Allow-Origin", url.origin);
+			if (origin) {
+				response.headers.set("Access-Control-Allow-Origin", origin);
+			} else {
+				response.headers.set("Access-Control-Allow-Origin", "*");
+			}
 
 			// Append to/Add Vary header so browser will cache response correctly
 			response.headers.append("Vary", "Origin");
@@ -110,8 +128,13 @@ export default {
 		}
 
 		async function handleOptions(request) {
+			const origin = request.headers.get("Origin");
+			if (origin && !ALLOWED_FRONTEND_ORIGINS.has(origin)) {
+				return new Response("Forbidden: Origin not allowed", { status: 403 });
+			}
+
 			if (
-				request.headers.get("Origin") !== null &&
+				origin !== null &&
 				request.headers.get("Access-Control-Request-Method") !== null &&
 				request.headers.get("Access-Control-Request-Headers") !== null
 			) {
@@ -119,6 +142,7 @@ export default {
 				return new Response(null, {
 					headers: {
 						...corsHeaders,
+						"Access-Control-Allow-Origin": origin,
 						"Access-Control-Allow-Headers": request.headers.get(
 							"Access-Control-Request-Headers",
 						),
