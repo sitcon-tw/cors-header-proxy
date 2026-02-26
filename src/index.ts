@@ -133,14 +133,32 @@ export default {
 			let response = await fetch(request);
 			// Recreate the response so you can modify the headers
 
-			response = new Response(response.body, response);
-			// Set CORS headers
+			const filteredResponseHeaders = new Headers();
+			const allowedResponseHeaders = [
+				"cache-control",
+				"content-encoding",
+				"content-type",
+				"date",
+				"expires",
+				"last-modified",
+				"pragma",
+			];
 
-			if (origin) {
-				response.headers.set("Access-Control-Allow-Origin", origin);
-			} else {
-				response.headers.set("Access-Control-Allow-Origin", "*");
+			for (const header of allowedResponseHeaders) {
+				const value = response.headers.get(header);
+				if (value) {
+					filteredResponseHeaders.set(header, value);
+				}
 			}
+
+			response = new Response(response.body, {
+				status: response.status,
+				statusText: response.statusText,
+				headers: filteredResponseHeaders,
+			});
+
+			// Set CORS headers
+			response.headers.set("Access-Control-Allow-Origin", origin);
 
 			// Append to/Add Vary header so browser will cache response correctly
 			response.headers.append("Vary", "Origin");
