@@ -11,7 +11,7 @@ export default {
 		const API_URL = "https://examples.cloudflareworkers.com/demos/demoapi";
 
 		// The endpoint you want the CORS reverse proxy to be on
-		const PROXY_ENDPOINT = "/corsproxy/";
+		const PROXY_ENDPOINT = "/";
 
 		// The rest of this snippet for the demo page
 		function rawHtmlResponse(html) {
