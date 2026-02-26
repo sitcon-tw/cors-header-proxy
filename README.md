@@ -55,9 +55,10 @@ https://proxy.sitcon.org/?url=https://api.target.com/data
    npm run deploy
    ```
 
-## 安全性備註
+## 授權與來源 (License and Attribution)
 
-本專案已實作以下安全機制：
-- 強制 `Origin` 檢查，防止被用作通用跳板。
-- 雙向標頭清洗，保護使用者 Cookie 並防止回應污染。
-- 支援 CORS Preflight (OPTIONS) 請求處理。
+本專案採用 [MIT License](LICENSE)。
+
+部分程式碼源自 Cloudflare, Inc. 提供之官方範例，其同樣採用 MIT 授權：
+- **原始來源**: [Cloudflare Workers Examples - CORS Header Proxy](https://developers.cloudflare.com/workers/examples/cors-header-proxy/)
+
