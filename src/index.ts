@@ -13,6 +13,15 @@ export default {
 		// The endpoint you want the CORS reverse proxy to be on
 		const PROXY_ENDPOINT = "/";
 
+		const ALLOWED_FRONTEND_ORIGINS = new Set([
+			"https://sitcon.org",
+		]);
+
+		const ALLOWED_TARGET_ORIGINS = new Set([
+			"https://anchor.fm",
+			"https://feeds.soundon.fm",
+		]);
+
 		// The rest of this snippet for the demo page
 		function rawHtmlResponse(html) {
 			return new Response(html, {
@@ -42,11 +51,11 @@ export default {
           return fetch("${API_URL}").then(r => r.json())
         }
         reqs.proxy = async () => {
-          let href = "${PROXY_ENDPOINT}?apiurl=${API_URL}"
+          let href = "${PROXY_ENDPOINT}?url=${API_URL}"
           return fetch(window.location.origin + href).then(r => r.json())
         }
         reqs.proxypreflight = async () => {
-          let href = "${PROXY_ENDPOINT}?apiurl=${API_URL}"
+          let href = "${PROXY_ENDPOINT}?url=${API_URL}"
           let response = await fetch(window.location.origin + href, {
             method: "POST",
             headers: {
@@ -75,7 +84,7 @@ export default {
 
 		async function handleRequest(request) {
 			const url = new URL(request.url);
-			let apiUrl = url.searchParams.get("apiurl");
+			let apiUrl = url.searchParams.get("url");
 
 			if (apiUrl == null) {
 				apiUrl = API_URL;
