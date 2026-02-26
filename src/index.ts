@@ -104,10 +104,31 @@ export default {
 				return new Response("Invalid target URL", { status: 400 });
 			}
 
+			// Create a clean set of headers for the outgoing request
+			const filteredRequestHeaders = new Headers();
+			const allowedRequestHeaders = [
+				"accept",
+				"accept-language",
+				"content-type",
+				"user-agent",
+			];
+
+			for (const header of allowedRequestHeaders) {
+				const value = request.headers.get(header);
+				if (value) {
+					filteredRequestHeaders.set(header, value);
+				}
+			}
+
 			// Rewrite request to point to API URL. This also makes the request mutable
 			// so you can add the correct Origin header to make the API server think
 			// that this request is not cross-site.
-			request = new Request(apiUrl, request);
+			request = new Request(apiUrl, {
+				method: request.method,
+				headers: filteredRequestHeaders,
+				body: request.body,
+				redirect: "follow",
+			});
 			request.headers.set("Origin", new URL(apiUrl).origin);
 			let response = await fetch(request);
 			// Recreate the response so you can modify the headers
