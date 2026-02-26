@@ -84,8 +84,8 @@ export default {
 
 		async function handleRequest(request) {
 			const origin = request.headers.get("Origin");
-			if (origin && !ALLOWED_FRONTEND_ORIGINS.has(origin)) {
-				return new Response("Forbidden: Origin not allowed", { status: 403 });
+			if (!origin || !ALLOWED_FRONTEND_ORIGINS.has(origin)) {
+				return new Response("Forbidden: Origin not allowed or missing", { status: 403 });
 			}
 
 			const url = new URL(request.url);
@@ -150,8 +150,8 @@ export default {
 
 		async function handleOptions(request) {
 			const origin = request.headers.get("Origin");
-			if (origin && !ALLOWED_FRONTEND_ORIGINS.has(origin)) {
-				return new Response("Forbidden: Origin not allowed", { status: 403 });
+			if (!origin || !ALLOWED_FRONTEND_ORIGINS.has(origin)) {
+				return new Response("Forbidden: Origin not allowed or missing", { status: 403 });
 			}
 
 			if (
