@@ -41,11 +41,13 @@ https://proxy.sitcon.org/?url=https://api.target.com/data
 ### 開發與部署
 
 1. **安裝相依套件**：
+
    ```bash
    npm install
    ```
 
 2. **本地開發**：
+
    ```bash
    npm run dev
    ```
@@ -60,5 +62,5 @@ https://proxy.sitcon.org/?url=https://api.target.com/data
 本專案採用 [MIT License](LICENSE)。
 
 部分程式碼源自 Cloudflare, Inc. 提供之官方範例，其同樣採用 MIT 授權：
-- **原始來源**: [Cloudflare Workers Examples - CORS Header Proxy](https://developers.cloudflare.com/workers/examples/cors-header-proxy/)
 
+- **原始來源**: [Cloudflare Workers Examples - CORS Header Proxy](https://developers.cloudflare.com/workers/examples/cors-header-proxy/)
