@@ -6,10 +6,6 @@ export default {
 			"Access-Control-Max-Age": "86400",
 		};
 
-		// The URL for the remote third party API you want to fetch from
-		// but does not implement CORS
-		const API_URL = "https://examples.cloudflareworkers.com/demos/demoapi";
-
 		const ALLOWED_FRONTEND_ORIGINS = new Set([
 			"https://sitcon.org",
 		]);
@@ -26,10 +22,10 @@ export default {
 			}
 
 			const url = new URL(request.url);
-			let apiUrl = url.searchParams.get("url");
+			const apiUrl = url.searchParams.get("url");
 
-			if (apiUrl == null) {
-				apiUrl = API_URL;
+			if (!apiUrl) {
+				return new Response("Missing 'url' parameter", { status: 400 });
 			}
 
 			try {
