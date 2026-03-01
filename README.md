@@ -25,10 +25,6 @@
 https://proxy.sitcon.org/?url=https://api.target.com/data
 ```
 
-### 測試頁面
-
-直接存取代理伺服器的根目錄（不帶參數），會顯示一個內建的 HTML 測試頁面，供您確認代理功能是否正常。
-
 ## 設定與開發
 
 ### 白名單設定
